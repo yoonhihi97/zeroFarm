@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+	<select id="getNoticeBoardCnt" resultType="_int">
+		SELECT COUNT(*) FROM
+		BOARD WHERE BOARDTYPE='공지사항'
+	</select>
+	<select id="getEventBoardCnt" resultType="_int">
+		SELECT COUNT(*) FROM
+		BOARD WHERE BOARDTYPE='이벤트'
+	</select>
+	<select id="getBoardCnt" resultType="_int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	<select id="getNoticeboardList" parameterType="hashmap"
+		resultType="boarddto">
+		SELECT * FROM
+		(SELECT ROWNUM R, D.* FROM
+		(SELECT * FROM BOARD WHERE BOARDTYPE='공지사항' ORDER BY BOARDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<select id="getEventboardList" parameterType="hashmap"
+		resultType="boarddto">
+		SELECT * FROM
+		(SELECT ROWNUM R, D.* FROM
+		(SELECT * FROM BOARD WHERE BOARDTYPE='이벤트' ORDER BY BOARDNUM DESC) D) B
+		WHERE
+		B.R BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<select id="getSeq" resultType="_int" parameterType="string">
+		SELECT *
+		FROM BOARD WHERE EMAIL='admin' ORDER BY BOARDNUM DESC
+	</select>
+	<select id="getDetail" parameterType="_int"
+		resultType="boarddto">
+		SELECT * FROM BOARD WHERE BOARDNUM=#{boardnum}
+	</select>
+	<insert id="insertBoard" parameterType="boarddto">
+		INSERT INTO BOARD
+		VALUES(BOARD_SEQ.NEXTVAL, #{boardtitle},
+		#{boardcontents},#{boardtype},SYSDATE,0,#{email})
+	</insert>
+	<update id="updateReadCount" parameterType="_int">
+		UPDATE BOARD SET
+		BOARDCNT = BOARDCNT+1 WHERE BOARDNUM=#{boardnum}
+	</update>
+	<update id="updateBoard" parameterType="boarddto">
+		UPDATE BOARD SET
+		BOARDTITLE=#{boardtitle}, BOARDCONTENTS=#{boardcontents},BOARDTYPE=#{boardtype} WHERE BOARDNUM=#{boardnum}
+	</update>
+	<delete id="deleteBoard" parameterType="_int">
+		DELETE FROM BOARD WHERE
+		BOARDNUM=#{boardnum}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

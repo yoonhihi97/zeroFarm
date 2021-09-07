@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Campaign">
+	<select id="getCampaignCnt" resultType="_int">
+		SELECT COUNT(*) FROM CAMPAIGN
+	</select>
+	<select id="getCampaignList" parameterType="hashmap" resultType="campaigndto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM CAMPAIGN ORDER BY CAMNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<select id="getDetail" parameterType="_int" resultType="campaigndto">
+		SELECT * FROM CAMPAIGN WHERE CAMNUM=#{camnum}
+	</select>
+	<select id="getSeq" resultType="_int" parameterType="string">
+		SELECT CAMNUM FROM CAMPAIGN WHERE ID=#{userid} ORDER BY CAMNUM DESC
+	</select>
+	<insert id="insertCampaign" parameterType="campaigndto">
+		INSERT INTO CAMPAIGN
+		VALUES(CAMPAIG_NUM.NEXTVAL, #{camname}, #{camcontent},0,SYSDATE,#{enddate},#{sumimage},#{inimage},#{id})
+	</insert>
+	<insert id="insertCampaignUser" parameterType="campaignuserdto">
+		INSERT INTO CAMPAIGNUSER VALUES(CAMUSER_NUM.NEXTVAL, #{email}, #{campoint},SYSDATE,#{camnum})
+	</insert>
+	<update id="updateCamtotalpoint" parameterType="campaigndto">
+		UPDATE CAMPAIGN SET CAMTOTALPOINT = #{camtotalpoint} WHERE CAMNUM=#{camnum}
+	</update>
+	<update id="updateCampaign" parameterType="campaigndto">
+		UPDATE CAMPAIGN SET CAMNAME=#{camname}, CAMCONTENT=#{camcontent}, ENDDATE=#{enddate} , SUMIMAGE=#{sumimage}, INIMAGE=#{inimage}
+		WHERE CAMNUM=#{camnum}
+	</update>
+	<delete id="deleteCampaign" parameterType="_int">
+		DELETE FROM CAMPAIGN WHERE CAMNUM=#{camnum}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

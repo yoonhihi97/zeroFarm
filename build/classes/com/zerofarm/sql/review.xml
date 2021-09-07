@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="review">
+  <select id="getFundingCnt" resultType="_int">
+  	SELECT COUNT(*) FROM FUNDING
+  </select>
+  <select id="getFundingList" parameterType="hashmap" resultType="fundingdto">
+  	SELECT * FROM
+	  	(SELECT ROWNUM R, F.* FROM
+	  		(SELECT * FROM FUNDING ORDER BY FUNDNUM DESC) F) B
+	WHERE B.R BETWEEN #{startRow} AND #{endRow}
+  </select>
+  <select id="getReview" parameterType="_int" resultType="reviewdto">
+  	SELECT * FROM REVIEW WHERE FUNDNUM=#{fundnum} ORDER BY REVIEWNUMBER DESC
+  </select>
+  <select id="getSeq" resultType="_int" parameterType="string">
+  	SELECT FUNDNUM FROM FUNDING ORDER BY FUNDNUM DESC
+  </select>
+  <select id="getDetail" parameterType="_int" resultType="fundingdto">
+  	SELECT * FROM FUNDING WHERE FUNDNUM=#{fundnum} 	
+  </select>
+  <select id="likeReviewSelect" parameterType="likereviewdto" resultType="_int">
+  	SELECT COUNT(*) FROM LIKEREVIEW WHERE EMAIL=#{email} AND FUNDNUM=#{fundnum} AND REVIEWNUMBER=#{reviewnumber}
+  </select>
+  <insert id="insertFunding" parameterType="fundingdto">
+  	INSERT INTO FUNDING 
+  	VALUES(FUND_SEQ.NEXTVAL, #{fundinfo}, #{type}, SYSDATE, SYSDATE+30, 800000, 500000, #{unit}, 200000 )
+  </insert>
+  <insert id="insertReview" parameterType="reviewdto">
+  INSERT INTO REVIEW
+  VALUES(REVIEW_SEQ.NEXTVAL, #{email}, SYSDATE, SYSDATE, 0, #{content}, #{fundnum})
+  </insert>	
+  <insert id="likeReview" parameterType="likereviewdto">
+  	INSERT INTO LIKEREVIEW VALUES(LIKEREVIEW_SEQ.NEXTVAL, #{email}, #{fundnum}, #{reviewnumber}, SYSDATE)
+  </insert>
+  <update id="modifyReview" parameterType="hashmap">
+  	UPDATE REVIEW SET CONTENT=#{content}, UDATE=SYSDATE WHERE REVIEWNUMBER=#{reviewnumber}
+  </update>
+  <update id="likeUp">
+  	UPDATE REVIEW SET "LIKE"="LIKE"+1 WHERE REVIEWNUMBER=#{reviewnumber}
+  </update>
+  <delete id="deleteReview" parameterType="_int">
+  	DELETE FROM REVIEW WHERE REVIEWNUMBER=#{reviewnumber}
+  </delete>
+  </mapper>

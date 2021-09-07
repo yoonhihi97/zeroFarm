@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Funding">
+	<insert id="newFunding" parameterType="fundingdto">
+		INSERT INTO WEB.FUNDING
+		(FUNDNUM, FUNDTITLE, FUNDINFO, TYPE, STARTDATE, ENDDATE, GOALPRICE, NOWPRICE, UNIT, PRICE, EMAIL)
+		VALUES(FUND_SEQ.NEXTVAL,#{fundtitle},#{fundinfo},#{type},#{startdate},#{enddate},#{goalprice},#{nowprice},#{unit},#{price},#{email})
+	</insert>
+	<insert id="newFundImg" parameterType="fundimgdto">
+		INSERT INTO WEB.FUNDIMG
+		(FUNDNUM, IMG1, IMG2, IMG3, IMG4, IMG5)
+		VALUES(FUND_SEQ.CURRVAL, #{img1},#{img2},#{img3},#{img4},#{img5})
+	</insert>
+	<update id="addPrice" parameterType="hashMap">
+		UPDATE WEB.FUNDING
+		SET NOWPRICE = NOWPRICE+#{price}
+		WHERE FUNDNUM=#{fundnum}
+	</update>
+	<select id="getFundCnt" resultType="_int">
+		SELECT COUNT(*) FROM FUNDING
+	</select>
+	<select id="getFundList" parameterType="hashmap" resultType="fundingdto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM FUNDING ORDER BY FUNDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select> 
+	<select id="getFundList_fruit" parameterType="hashmap" resultType="fundingdto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM FUNDING WHERE TYPE='fruit' ORDER BY FUNDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select> 
+	<select id="getFundList_vegetable" parameterType="hashmap" resultType="fundingdto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM FUNDING WHERE TYPE='vegetable' ORDER BY FUNDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select> 
+	<select id="getFundList_plants" parameterType="hashmap" resultType="fundingdto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM FUNDING WHERE TYPE='plants' ORDER BY FUNDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select> 
+	<select id="getFundImgList" parameterType="hashmap" resultType="fundimgdto">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM
+				(SELECT * FROM FUNDIMG ORDER BY FUNDNUM DESC) D) B
+		WHERE B.R BETWEEN #{startRow} AND #{endRow}
+	</select> 
+	<select id="getDetail" parameterType="_int" resultType="fundingdto">
+		SELECT * FROM FUNDING WHERE FUNDNUM=#{fundnum}
+	</select>
+	<select id="getImg" parameterType="_int" resultType="fundimgdto">
+		SELECT * FROM FUNDIMG WHERE FUNDNUM=#{fundnum}
+	</select>
+	<insert id="addOrderList" parameterType="orderdto">
+		INSERT INTO ORDERLIST
+		(ORDERNUM, EMAIL, FUNDTITLE, FUNDCNT, PRICE, ORDERNOW)
+		VALUES(ORDER_SEQ.NEXTVAL,#{email},#{fundtitle},#{fundcnt},#{price}, #{ordernow})
+	</insert>
+</mapper>

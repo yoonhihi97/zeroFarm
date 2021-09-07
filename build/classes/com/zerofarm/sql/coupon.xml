@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Coupon">
+	<select id="getCouponCnt" resultType="_int">
+		SELECT COUNT(*) FROM COUPON
+	</select>
+	<select id="getCouponList" parameterType="hashmap"
+		resultType="coupondto">
+		SELECT * FROM
+		(SELECT ROWNUM R, D.* FROM
+		(SELECT * FROM
+		COUPON WHERE COUPONUSE='미사용' ORDER BY COUPONCODE DESC) D) B
+		WHERE B.R
+		BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<insert id="InsertCoupon" parameterType="coupondto">
+		INSERT INTO COUPON
+		VALUES(COUPON_SEQ.NEXTVAL,
+		#{couponname},SYSDATE,#{coupondiscount},SYSDATE+365,'미사용',#{email})
+	</insert>
+
+	<update id="UpdateCoupon" parameterType="coupondto">
+		UPDATE COUPON SET
+		COUPONUSE='사용' WHERE COUPONCODE=#{couponcode}
+	</update>
+	<select id="getCouponDiscount" parameterType="_int"
+		resultType="_int">
+		SELECT COUPONDISCOUNT FROM COUPON WHERE	
+		COUPONCODE=#{couponcode}
+	</select>
+	<update id="UpdatePoint" parameterType="coupondto">
+		UPDATE "USER"
+		SET POINT = POINT + #{coupondiscount}
+		WHERE EMAIL=#{email}
+	</update>
+</mapper>

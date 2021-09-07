@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <typeAliases>
+  	<typeAlias alias="fundingdto" type="com.zerofarm.app.funding.dao.FundingDTO"/>
+  	<typeAlias alias="fundimgdto" type="com.zerofarm.app.funding.dao.FundImgDTO"/>
+  	<typeAlias alias="orderdto" type="com.zerofarm.app.funding.dao.OrderDTO"/>
+  	<typeAlias alias="userdto" type="com.zerofarm.app.user.dao.UserDTO"/>
+  	<typeAlias alias="sellerdto" type="com.zerofarm.app.seller.dao.SellerDTO"/>
+  	<typeAlias alias="campaigndto" type="com.zerofarm.app.campaign.dao.CampaignDTO"/>
+  	<typeAlias alias="filedto" type="com.zerofarm.app.campaign.dao.FileDTO"/>
+  	<typeAlias alias="campaignuserdto" type="com.zerofarm.app.campaign.dao.CampaignUserDTO"/>
+  	<typeAlias alias="reviewdto" type="com.zerofarm.app.review.dao.ReviewDTO"/>
+  	<typeAlias alias="boarddto" type="com.zerofarm.app.board.dao.BoardDTO"/>
+  	<typeAlias alias="boardfiledto" type="com.zerofarm.app.board.dao.BoardFileDTO"/>
+  	<typeAlias alias="coupondto" type="com.zerofarm.app.coupon.dao.CouponDTO"/>
+  	<typeAlias alias="likereviewdto" type="com.zerofarm.app.review.dao.LikeReviewDTO"/>
+  	
+  </typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        <property name="username" value="web"/>
+        <property name="password" value="web"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/zerofarm/sql/funding.xml"/>
+    <mapper resource="com/zerofarm/sql/user.xml"/>
+    <mapper resource="com/zerofarm/sql/seller.xml"/>
+    <mapper resource="com/zerofarm/sql/campaign.xml"/>
+    <mapper resource="com/zerofarm/sql/file.xml"/>
+    <mapper resource="com/zerofarm/sql/review.xml"/>
+    <mapper resource="com/zerofarm/sql/board.xml"/>
+    <mapper resource="com/zerofarm/sql/boardfile.xml"/>
+    <mapper resource="com/zerofarm/sql/coupon.xml"/>
+  </mappers>
+</configuration>
+
+
+
+
+
+
+
+
+
+
+
